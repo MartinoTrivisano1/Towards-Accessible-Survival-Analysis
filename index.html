@@ -1,44 +1,429 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Framework Demo</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background: #f5f7fb;
-      margin: 0;
-      padding: 40px;
-    }
-    h1 {
-      color: #1f2937;
-    }
-    p {
-      color: #555;
-      max-width: 700px;
-      margin: 0 auto 30px;
-    }
-    iframe {
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accessible Survival Analysis Framework</title>
+    <style>
+        /* CSS Variables - Clean, Unified Light Theme */
+        :root {
+            --primary: #0056b3; /* Academic Blue */
+            --primary-light: #e6f0fa;
+            --accent: #00a8cc;
+            --text-dark: #1e293b;
+            --text-body: #475569;
+            --bg-main: #f8fafc;
+            --bg-white: #ffffff;
+            --radius: 12px;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --shadow-hover: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-main);
+            color: var(--text-body);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 { color: var(--text-dark); }
+
+        /* Navbar */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            border-bottom: 1px solid #e2e8f0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+        }
+
+        nav .logo {
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+        }
+
+        nav ul { list-style: none; display: flex; gap: 25px; }
+        nav a { text-decoration: none; color: var(--text-body); font-weight: 600; font-size: 0.9rem; transition: color 0.2s;}
+        nav a:hover { color: var(--primary); }
+
+        /* Base Container */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 80px 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 180px 20px 100px;
+            text-align: center;
+            background: linear-gradient(180deg, var(--primary-light) 0%, var(--bg-main) 100%);
+        }
+
+        .hero-tag {
+            display: inline-block;
+            background: rgba(0, 86, 179, 0.1);
+            color: var(--primary);
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 25px;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            line-height: 1.2;
+            max-width: 950px;
+            margin: 0 auto 25px;
+            letter-spacing: -0.5px;
+        }
+
+        .authors {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .affiliations {
+            font-size: 0.95rem;
+            color: var(--text-body);
+            margin-bottom: 40px;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 14px 36px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 14px rgba(0, 86, 179, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 86, 179, 0.4);
+        }
+
+        /* Abstract Section */
+        .abstract-section {
+            background: var(--bg-white);
+            padding: 50px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            margin-top: -30px;
+            position: relative;
+            z-index: 10;
+            border-left: 4px solid var(--primary);
+        }
+
+        .abstract-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .abstract-section p {
+            font-size: 1.05rem;
+            text-align: justify;
+            color: var(--text-body);
+        }
+
+        /* Methodology Section */
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-header h2 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .section-header p {
+            font-size: 1.1rem;
+            color: var(--text-body);
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .method-card {
+            background: var(--bg-white);
+            padding: 40px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #f1f5f9;
+        }
+
+        .method-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary-light);
+        }
+
+        .method-card h3 {
+            color: var(--primary);
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+
+        .method-card ul {
+            margin-left: 20px;
+            margin-top: 15px;
+        }
+
+        .method-card li {
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+
+        /* Results Section */
+        .results-wrapper {
+            background: var(--bg-white);
+            border-radius: var(--radius);
+            padding: 60px 40px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid #f1f5f9;
+        }
+
+        .results-wrapper h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2.2rem;
+        }
+
+        .results-wrapper > p {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 50px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            text-align: center;
+        }
+
+        .metric-box {
+            background: var(--bg-main);
+            padding: 30px 20px;
+            border-radius: var(--radius);
+            border: 1px solid #e2e8f0;
+            transition: transform 0.2s;
+        }
+
+        .metric-box:hover {
+            transform: scale(1.02);
+        }
+
+        .metric-box h4 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .metric-box span {
+            display: block;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .metric-box small {
+            color: var(--text-body);
+            font-size: 0.85rem;
+        }
+
+        /* Demo Section */
+        .demo-section {
+            text-align: center;
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            max-width: 900px;
+            margin: 40px auto 0;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-hover);
+            background: #000;
+            border: 4px solid var(--bg-white);
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-white);
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 1px solid #e2e8f0;
+            font-size: 0.9rem;
+            color: var(--text-body);
+        }
+
+        @media (max-width: 768px) {
+            .grid-2, .metrics-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 2.2rem; }
+            nav ul { display: none; } /* Simplified mobile nav */
+        }
+    </style>
 </head>
 <body>
 
-  <h1>Framework Demo</h1>
+<nav>
+    <div class="logo">SURVIVAL ANALYSIS FRAMEWORK</div>
+    <ul>
+        <li><a href="#abstract">Abstract</a></li>
+        <li><a href="#framework">Methodology</a></li>
+        <li><a href="#results">Results</a></li>
+        <li><a href="#demo">Demo</a></li>
+    </ul>
+</nav>
 
-  <p>
-    This page presents a demonstration of the  framework, showing how survival models 
-    are trained and used to generate predictions and dynamic visualizations.
-  </p>
+<header class="hero">
+    <span class="hero-tag">Polytechnic of Bari - SisInfLab</span>
+    <h1>Towards Accessible Survival Analysis: A Reproducible Framework with Integrated Interpretability and GUI-Based Interaction</h1>
+    <p class="authors">Paolo Sorino, Domenico Lofù, Martino Trivisano, Leonardo Capano, Tommaso Di Noia, Eugenio Di Sciascio</p>
+    <p class="affiliations">Department of Electrical and Information Engineering, Polytechnic of Bari, 70125 Bari, Italy</p>
+    <a href="#demo" class="btn-primary">Watch Interactive Demo</a>
+</header>
 
-  <!-- METTI QUI IL TUO VIDEO YOUTUBE -->
-  <iframe width="800" height="450"
-    src="https://www.youtube.com/embed/VIDEO_ID"
-    frameborder="0" allowfullscreen>
-  </iframe>
+<section class="container" id="abstract">
+    <div class="abstract-section">
+        <h2>Abstract</h2>
+        <p>
+            Reproducibility, deployment consistency, and usability remain critical challenges in survival analysis, particularly when integrating heterogeneous modeling approaches into real-world workflows. This work presents a user-oriented and reproducible framework for survival analysis that unifies statistical, machine learning (ML), and deep learning (DL) models within a consistent and accessible analytical environment. The framework enforces standardized preprocessing, deterministic data partitioning, and survival-aware validation, while an artifact-based design ensures consistent reconstruction of the analytical workflow during inference. A graphical user interface (GUI) with role-based access control enables both technical and non-technical users to interact with the system through structured and guided workflows. Interpretability is integrated through feature attribution methods based on SHapley Additive exPlanations (SHAP), complemented by controlled natural-language explanations.
+        </p>
+    </div>
+</section>
+
+<section class="container" id="framework">
+    <div class="section-header">
+        <h2>The Analytical Ecosystem</h2>
+        <p>A modular architecture designed for advanced and robust mortality modeling.</p>
+    </div>
+
+    <div class="grid-2">
+        <div class="method-card">
+            <h3>1. The Problem and the Data</h3>
+            <p>Survival analysis methods generally require strong programming skills, which limits the adoption of advanced models by domain experts (e.g., healthcare professionals). The framework was tested on a real-world administrative cohort from the municipality of Taranto (a reproducible subsample of 5,000 observations). The dataset includes demographics and long-term environmental exposure variables (NO₂, PM₁₀, PM₂.₅).</p>
+        </div>
+
+        <div class="method-card">
+            <h3>2. Preprocessing and Pipeline</h3>
+            <p>The system guarantees zero "data leakage" by enforcing strict deterministic transformations:</p>
+            <ul>
+                <li>Removal of features with a missing value rate > 50%.</li>
+                <li>One-Hot Encoding for categorical variables.</li>
+                <li>Transformations are fitted exclusively on the training set and identically applied to the test set to preserve evaluation integrity.</li>
+            </ul>
+        </div>
+
+        <div class="method-card">
+            <h3>3. Heterogeneous Models Supported</h3>
+            <p>The modeling layer integrates classical and Artificial Intelligence approaches through a unified computational interface, including:</p>
+            <ul>
+                <li><strong>Statistical Models:</strong> Kaplan-Meier, Cox Proportional Hazards.</li>
+                <li><strong>Machine Learning:</strong> Random Survival Forest (RSF), Gradient Boosting (GB), Survival SVM.</li>
+                <li><strong>Deep Learning:</strong> DeepSurv (optimized via Optuna).</li>
+            </ul>
+        </div>
+
+        <div class="method-card">
+            <h3>4. Explainability (XAI)</h3>
+            <p>Interpretability modules are embedded as core components of the analytical pipeline:</p>
+            <ul>
+                <li><strong>SHAP:</strong> For local and global feature importance attribution.</li>
+                <li><strong>DiCE:</strong> To generate counterfactual scenarios.</li>
+                <li><strong>LLM:</strong> A Language Model generates natural-language explanations strictly anchored to the analytical outputs, effectively preventing hallucinations.</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section class="container" id="results">
+    <div class="results-wrapper">
+        <h2>Experimental Results</h2>
+        <p>The experimental results demonstrate that when heterogeneous survival models are executed within a shared and strictly controlled pipeline, they achieve comparable predictive performance. This highlights the critical importance of reproducibility and consistent configuration over model-specific differences.</p>
+
+        <div class="metrics-grid">
+            <div class="metric-box">
+                <h4>0.77</h4>
+                <span>C-Index</span>
+                <small>Random Survival Forest (RSF)</small>
+            </div>
+            <div class="metric-box">
+                <h4>0.76</h4>
+                <span>C-Index</span>
+                <small>Survival SVM</small>
+            </div>
+            <div class="metric-box">
+                <h4>0.75</h4>
+                <span>C-Index</span>
+                <small>DeepSurv & GB</small>
+            </div>
+            <div class="metric-box">
+                <h4>0.03</h4>
+                <span>IBS</span>
+                <small>Integrated Brier Score (RSF, DeepSurv, GB)</small>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="container" id="demo">
+    <div class="demo-section">
+        <div class="section-header">
+            <h2>Interactive Framework Demo</h2>
+            <p>A practical demonstration of how the application layer enables non-programming users to load datasets, visualize prediction curves (Survival Curves), and generate automated natural-language explanations based on SHAP values.</p>
+        </div>
+
+        <div class="video-container">
+            <iframe
+                    src="https://www.youtube.com/embed/VIDEO_ID"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>Academic Research. Polytechnic of Bari - SisInf Lab. A.Y. 2024-2025.</p>
+</footer>
 
 </body>
 </html>
